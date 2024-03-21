@@ -67,10 +67,12 @@
             <div class='form-check mt-3'>
                 <input class='form-check-input' type='radio' name='url-type' value='custom' id='paste-url-custom-radio'>
                 <label class='form-check-label' for='paste-url-custom-radio'>Set by your own</label>
-                <div id='paste-url-input-wrapper' class="input-group mt-2">
-                    <span class="input-group-text" id='paste-url-input-prefix'>{{BASE_URL}}/~</span>
-                    <input type="text" class="form-control" id='paste-custom-url-input' minlength='3' name='custom-url'>
-                </div>
+                    <div id='paste-url-input-wrapper' class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id='paste-url-input-prefix'>{{BASE_URL}}/~</span>
+                        </div>
+                        <input type="text" class="form-control" id='paste-custom-url-input' name='custom-url' aria-describedby="paste-url-input-prefix" minlength="3">
+                    </div>
                 <span class='form-text'>Example: {{BASE_URL}}/~stocking</span>
             </div>
             <div class='form-check mt-3'>
@@ -86,25 +88,25 @@
             <h2>Uploaded paste</h2>
         </div>
         <div class="card-body">
+            <label class='form-text' for='uploaded-url'>URL</label>
             <div class='uploaded-entry'>
                 <input class="form-control" id='uploaded-url' type='text' class='uploaded-table-text' readonly>
                 <button class='btn btn-primary copy-button'>Copy</button>
             </div>
-            <label class='form-text' for='uploaded-url'>URL</label>
+            <label class='form-text' for='suggest-url'>Admin URL</label>            
             <div class='uploaded-entry'>
                 <input class="form-control" id='uploaded-admin-url' type='text' class='uploaded-table-text' readonly>
                 <button class='btn btn-primary copy-button'>Copy</button>
             </div>
-            <label class='form-text' for='suggest-url'>Admin URL</label>
+            <label class='form-text' for='uploaded-admin-url'>Suggest URL</label>
             <div class='uploaded-entry'>
                 <input class="form-control" id='uploaded-suggest-url' type='text' class='uploaded-table-text' readonly>
                 <button class='btn btn-primary copy-button'>Copy</button>
             </div>
-            <label class='form-text' for='uploaded-admin-url'>Suggest URL</label>
+            <label class='form-text' for='uploaded-expiration'>Expiration (secs)</label>
             <div class='uploaded-entry'>
                 <input class="form-control" type='text' id='uploaded-expiration' class='uploaded-table-text' readonly>
             </div>
-            <label class='form-text' for='uploaded-expiration'>Expiration (secs)</label>
         </div>
     </div>
     <div class="text-center mt-3">

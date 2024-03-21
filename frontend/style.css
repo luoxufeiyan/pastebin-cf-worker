@@ -172,7 +172,6 @@ body {
 }
 
 #paste-url-input-wrapper {
-    display: inline-block;
     border: 1px var(--color-border) solid;
     background-color: var(--color-bg);
     font-size: 13px;
@@ -200,8 +199,8 @@ body {
     background-color: var(--color-bg);
     outline: none;
     font-size: 13px;
-    width: 30em;
-    max-width: 80vw;
+    /* width: 30em;
+    max-width: 80vw; */
     border-radius: 2px;
 }
 
