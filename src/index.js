@@ -1,4 +1,4 @@
-import { WorkerError, parsePath, parseExpiration, genRandStr, decode, params, encodeRFC5987ValueChars, getDispFilename } from "./common.js";
+import { WorkerError, parsePath, parseExpiration, genRandStr, genRandDigit, decode, params, encodeRFC5987ValueChars, getDispFilename } from "./common.js";
 import { handleOptions, corsWrapResponse } from './cors.js'
 import { makeHighlight } from "./highlight.js"
 import { parseFormdata, getBoundary } from "./parseFormdata.js"
@@ -273,9 +273,18 @@ async function createPaste(env, content, isPrivate, expire, short, createDate, p
   const short_len = isPrivate ? params.PRIVATE_RAND_LEN : params.RAND_LEN
 
   if (short === undefined) {
-    while (true) {
-      short = genRandStr(short_len)
-      if ((await env.PB.get(short)) === null) break
+    if(isPrivate){
+      while(true){
+        short = genRandStr(short_len)
+        if ((await env.PB.get(short)) === null) break
+      }
+    }
+
+    else{
+      while (true) {
+        short = genRandDigit(short_len)
+        if ((await env.PB.get(short)) === null) break
+      }
     }
   }
 

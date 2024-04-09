@@ -1,7 +1,7 @@
 export const params = {
   CHAR_GEN : "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
   NAME_REGEX : /^[a-zA-Z0-9+_\-\[\]*$@,;]{3,}$/,
-  RAND_LEN : 4,
+  RAND_LEN : 6,
   PRIVATE_RAND_LEN : 24,
   ADMIN_PATH_LEN : 24,
   SEP : ":",
@@ -28,6 +28,14 @@ export function genRandStr(len) {
   }
   return str
 }
+
+export function genRandDigit(len) {
+  let min = Math.pow(10, len - 1); // smallest n-digit number
+  let max = Math.pow(10, len) - 1; // largest n-digit number
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 
 export function parsePath(pathname) {
   // Example of paths (SEP=':'). Note: query string is not processed here
