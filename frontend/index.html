@@ -14,7 +14,7 @@
 <div class='container my-5 markdown-body'>
     <h1 class="text-center">PasteBin</h1>
     <p>This is an open source pastebin deployed on Cloudflare Workers. </p>
-    <p><b>Usage</b>: paste any text here, submit, then share it with URL. </p>
+    <p><b>Usage</b>: paste any text here, submit, then share it with URL. Maximum file size: 25MB. </p>
     <p><b>Warning</b>: only for temporary share, files will be deleted without notice!</p>
 
     <div id='paste-input-panel' class="card">
@@ -73,7 +73,7 @@
                         </div>
                         <input type="text" class="form-control" id='paste-custom-url-input' name='custom-url' aria-describedby="paste-url-input-prefix" minlength="3">
                     </div>
-                <span class='form-text'>Example: {{BASE_URL}}/~stocking</span>
+                <span class='form-text'>Example: {{BASE_URL}}/~layla</span>
             </div>
             <div class='form-check mt-3'>
                 <input class='form-check-input' type='radio' name='url-type' value='admin' id='paste-url-admin-radio'>
