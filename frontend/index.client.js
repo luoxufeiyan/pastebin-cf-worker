@@ -2,6 +2,65 @@ window.addEventListener('DOMContentLoaded', () => {
     const base_url = '{{BASE_URL}}'
     const deploy_date = new Date('{{DEPLOY_DATE}}')
 
+    // Cache DOM elements first
+    const submitButton = $('#submit-button')
+    const deleteButton = $('#delete-button')
+    const pasteEditArea = $('#paste-textarea')
+    const submitErrMsg = $('#submit-error-msg')
+    const fileInput = $('#paste-tab-file input[type="file"]')
+
+    // Set default values for create paste
+    let urlType = 'short'
+    let inputType = 'edit'
+    let expiration = '7d'
+    let passwd = ''
+    let customName = '', adminUrl = '', file = null
+
+    // Set default expiration
+    $('#paste-expiration-input').val(expiration)
+
+    // Check if we're accessing an admin URL
+    const pathname = window.location.pathname
+    if (pathname.includes(':')) {
+        // Switch to edit mode
+        $('#create-paste-tab-text').text('Edit Paste')
+        
+        // Switch to the create/edit tab
+        const createPasteTab = new bootstrap.Tab($('#create-paste-tab'))
+        createPasteTab.show()
+
+        // Extract the admin URL
+        const adminUrl = base_url + pathname
+        $('#paste-url-admin-radio').prop('checked', true)
+        $('#admin-url-input-group').show()
+        $('#paste-admin-url-input').val(adminUrl)
+
+        // Fetch the paste content and metadata
+        $.get({
+            url: base_url + pathname.split(':')[0],
+            success: (content) => {
+                $('#paste-textarea').val(content)
+                // Enable the submit button since we have content
+                submitButton.prop('disabled', false)
+                    .removeClass('btn-secondary')
+                    .addClass('btn-primary')
+                submitErrMsg.text('')
+            },
+            error: handleError
+        })
+
+        // Get the admin token from the URL
+        const adminToken = pathname.split(':')[1]
+        if (adminToken) {
+            passwd = adminToken
+            $('#paste-passwd-input').val(adminToken)
+        }
+
+        // Enable the delete button
+        deleteButton.removeClass('d-none').prop('disabled', false)
+            .addClass('btn-danger')
+    }
+
     // Initialize Bootstrap components
     const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip))
@@ -29,23 +88,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Handle go button click
     $('#go-button').on('click', handleGetPaste)
-
-    // Set default values for create paste
-    let urlType = 'short'
-    let inputType = 'edit'
-    let expiration = '7d'
-    let passwd = ''
-    let customName = '', adminUrl = '', file = null
-
-    // Cache DOM elements
-    const submitButton = $('#submit-button')
-    const deleteButton = $('#delete-button')
-    const pasteEditArea = $('#paste-textarea')
-    const submitErrMsg = $('#submit-error-msg')
-    const fileInput = $('#paste-tab-file input[type="file"]')
-
-    // Set default expiration
-    $('#paste-expiration-input').val(expiration)
 
     // Handle paste content changes
     function updateSubmitButton() {
@@ -166,8 +208,21 @@ window.addEventListener('DOMContentLoaded', () => {
         if (urlType === 'long') fd.append('p', 'true')
         if (urlType === 'custom' && customName) fd.append('n', customName)
 
-        $.post({
-            url: base_url,
+        // Determine if we're updating an existing paste
+        const isUpdate = window.location.pathname.includes(':')
+        const method = isUpdate ? 'PUT' : 'POST'
+        
+        // For updates, include the admin token in the URL
+        let submitUrl = base_url
+        if (isUpdate) {
+            const pathname = window.location.pathname
+            const [pastePath, adminToken] = pathname.split(':')
+            submitUrl = base_url + pastePath + ':' + adminToken
+        }
+
+        $.ajax({
+            url: submitUrl,
+            method: method,
             data: fd,
             processData: false,
             contentType: false,
