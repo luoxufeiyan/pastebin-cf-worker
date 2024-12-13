@@ -1,4 +1,4 @@
-name = "pb"
+name = "pastebin"
 compatibility_date = "2023-01-28"
 
 workers_dev = false
@@ -14,16 +14,16 @@ rules = [
 
 [[routes]]
 # Refer to https://developers.cloudflare.com/workers/wrangler/configuration/#routes
-pattern = "paste.gaoxu.me"
+pattern = "paste.fledding.com"
 custom_domain = true
 
 [[kv_namespaces]]
 binding = "PB"  # do not touch this
-id = "341f05be92de41bab67eb59ae90d7a30"  # id of your KV namespace
+id = "5bcf0c8f50054bf0bae1d294d5b558ff"  # id of your KV namespace
 
 [vars]
 # must be consistent with your routes
-BASE_URL = "https://paste.gaoxu.me"
+BASE_URL = "https://paste.fledding.com"
 
 # url to repo, displayed in index page
 REPO = "https://github.com/luoxufeiyan/pastebin-cf-worker"
