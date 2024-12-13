@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PasteFlare</title>
     <link rel='icon' href='{{FAVICON}}' type='image/png' />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <style media='screen'>
         {{CSS}}
     </style>
@@ -70,7 +70,7 @@
                         </ul>
 
                         <div id="paste-edit" class="mb-3">
-                            <textarea id="paste-textarea" class="form-control paste-area" placeholder="Enter your text here..."></textarea>
+                            <textarea id="paste-textarea" class="form-control paste-area" placeholder="Enter your text here..." rows="10"></textarea>
                         </div>
 
                         <div id="paste-file-show" class="mb-3 d-none">
@@ -100,8 +100,8 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="paste-expiration-input" class="form-label">Expiration (e.g., 1h, 1d, 1w)</label>
-                                <input type="text" class="form-control" id="paste-expiration-input" placeholder="7d" value="7d">
+                                <label for="paste-expiration-input" class="form-label">Expiration</label>
+                                <input type="text" class="form-control" id="paste-expiration-input" placeholder="Units: s (seconds), m (minutes), h (hours), d (days), M (months)" value="7d">
                             </div>
 
                             <div class="col-md-6">
@@ -113,7 +113,7 @@
                                 <label for="paste-custom-url-input" class="form-label">Custom URL</label>
                                 <div class="input-group">
                                     <span class="input-group-text">{{BASE_URL}}/~</span>
-                                    <input type="text" class="form-control" id="paste-custom-url-input" placeholder="layla">
+                                    <input type="text" class="form-control" id="paste-custom-url-input" placeholder="longer than 3 characters">
                                 </div>
                             </div>
 
@@ -201,8 +201,8 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script>
         {{INDEX_JS}}
     </script>
