@@ -6,7 +6,7 @@ import { getStaticPage } from './staticPages.js'
 import { makeMarkdown } from "./markdown.js";
 
 import { getType } from "mime/lite.js"
-import {verifyAuth} from "./auth.js";
+import { verifyAuth } from "./auth.js";
 
 export default {
   async fetch(request, env, ctx) {
@@ -87,6 +87,15 @@ async function handlePostOrPut(request, env, ctx, isPut) {
     throw new WorkerError(400, "cannot find content in formdata")
   } else if (content.length > params.MAX_LEN) {
     throw new WorkerError(413, "payload too large")
+  }
+
+  // check for blocked keywords
+  const textContent = decode(content)
+  // You can define blocked keywords in wrangler.toml under [vars]: BLOCKED_KEYWORDS = "spam,ads"
+  // Or hardcode an array here: const blockedKeywords = ["spam", "ads"]
+  const blockedKeywords = env.BLOCKED_KEYWORDS ? env.BLOCKED_KEYWORDS.split(',') : []
+  if (blockedKeywords.some(keyword => keyword.trim() && textContent.includes(keyword.trim()))) {
+    throw new WorkerError(400, "Paste content contains blocked keywords.")
   }
 
   // check if expiration is legal
@@ -182,7 +191,11 @@ async function handleGet(request, env, ctx) {
     })
   }
 
-  const mime = url.searchParams.get("mime") || getType(ext) || "text/plain"
+  let mime = url.searchParams.get("mime") || getType(ext) || "text/plain"
+
+  if (mime.includes("html")) {
+    mime = "text/plain"
+  }
 
   const disp = url.searchParams.has("a") ? "attachment" : "inline"
 
@@ -228,12 +241,12 @@ async function handleGet(request, env, ctx) {
   const lang = url.searchParams.get("lang")
   if (lang) {
     return new Response(makeHighlight(decode(item.value), lang), {
-      headers: { "content-type": `text/html;charset=UTF-8`, ...pasteCacheHeader(env) , ...lastModifiedHeader(item)},
+      headers: { "content-type": `text/html;charset=UTF-8`, ...pasteCacheHeader(env), ...lastModifiedHeader(item) },
     })
   } else {
 
     // handle default
-    const headers = { "content-type": `${mime};charset=UTF-8`, ...pasteCacheHeader(env) , ...lastModifiedHeader(item)}
+    const headers = { "content-type": `${mime};charset=UTF-8`, ...pasteCacheHeader(env), ...lastModifiedHeader(item) }
     if (returnFilename) {
       const encodedFilename = encodeRFC5987ValueChars(returnFilename)
       headers["content-disposition"] = `${disp}; filename*=UTF-8''${encodedFilename}`
@@ -266,14 +279,14 @@ async function createPaste(env, content, isPrivate, expire, short, createDate, p
   const short_len = isPrivate ? params.PRIVATE_RAND_LEN : params.RAND_LEN
 
   if (short === undefined) {
-    if(isPrivate){
-      while(true){
+    if (isPrivate) {
+      while (true) {
         short = genRandStr(short_len)
         if ((await env.PB.get(short)) === null) break
       }
     }
 
-    else{
+    else {
       while (true) {
         short = genRandDigit(short_len)
         if ((await env.PB.get(short)) === null) break

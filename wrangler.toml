@@ -42,3 +42,6 @@ CACHE_STATIC_PAGE_AGE = 7200
 
 # Cache-Control max-age for static pages
 CACHE_PASTE_AGE = 600
+
+# Comma-separated list of blocked keywords
+BLOCKED_KEYWORDS = 'example1,example2,example3'
